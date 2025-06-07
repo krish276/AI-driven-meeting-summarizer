@@ -4,6 +4,7 @@ from datetime import datetime
 import sounddevice as sd
 import soundfile as sf
 import openai
+import google.generativeai as genai
 from docx import Document
 
 
@@ -23,25 +24,15 @@ def transcribe_audio(audio_file: str) -> str:
     return response["text"]
 
 
-def extract_action_items(transcript: str, model: str = "gpt-3.5-turbo") -> str:
-    """Use an LLM to extract action items and key decisions."""
-    system_prompt = (
-        "You are an assistant that summarizes meeting transcripts "
-        "into action items and key decisions."
-    )
-    user_prompt = (
+def extract_action_items(transcript: str, model: str = "gemini-pro") -> str:
+    """Use Google Gemini to extract action items and key decisions."""
+    genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
+    prompt = (
+        "You are an assistant that summarizes meeting transcripts into action items and key decisions.\n"
         "Extract the action items and key decisions from the following meeting transcript:\n" + transcript
     )
-
-    response = openai.ChatCompletion.create(
-        model=model,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        temperature=0,
-    )
-    return response.choices[0].message["content"].strip()
+    generation = genai.GenerativeModel(model).generate_content(prompt)
+    return generation.text.strip()
 
 
 def create_word_doc(transcript: str, summary: str, output_path: str) -> None:

@@ -9,14 +9,15 @@ This project provides a small script that can record meeting audio, transcribe i
 - [soundfile](https://pypi.org/project/SoundFile/)
 - [openai](https://pypi.org/project/openai/)
 - [python-docx](https://pypi.org/project/python-docx/)
+- [google-generativeai](https://pypi.org/project/google-generativeai/)
 
 Install dependencies with:
 
 ```bash
-pip install sounddevice soundfile openai python-docx
+pip install sounddevice soundfile openai python-docx google-generativeai
 ```
 
-You will also need an OpenAI API key available in the environment variable `OPENAI_API_KEY` to use the transcription and summarization features.
+You will also need an OpenAI API key available in the environment variable `OPENAI_API_KEY` for audio transcription and a Gemini API key in `GEMINI_API_KEY` for summarization.
 
 ## Usage
 
